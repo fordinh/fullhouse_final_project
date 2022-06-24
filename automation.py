@@ -35,7 +35,7 @@ def generate_driver():
     return driver
 
 
-def click(driver, xpath, enter=False, send_key=None, sleep=0.0, wait_element_is_visible=2, random_click=True,
+def click(driver, xpath, enter=False, send_key=None, sleep=0.0, wait_element_is_visible=2, random_click=False,
           ctrl_enter=False, clear=True):
     try:
         if wait_element_is_visible > 0:
@@ -99,14 +99,15 @@ def scroll_and_click_by_xpath(
         if range_scroll > 0:
             while i < range_scroll - delta:
                 delta_scroll = random.randint(2, delta)
-                driver.execute_script(f"window.scrollBy(0, {delta_scroll * 50});")
+                driver.execute_script("window.scrollBy({top: " + str(delta_scroll * 50) + ", behavior: 'smooth'});")
                 i += delta_scroll
 
                 time.sleep(float(random.randint(800, 1200) / 1000))
         else:
             while i < abs(range_scroll) + delta:
                 delta_scroll = random.randint(2, delta)
-                driver.execute_script(f"window.scrollBy(0, {delta_scroll * (-1) * 50});")
+                driver.execute_script(
+                    "window.scrollBy({top: " + str(delta_scroll * (-1) * 50) + ", behavior: 'smooth'});")
                 i += delta_scroll
 
                 time.sleep(float(random.randint(800, 1200) / 1000))
@@ -115,3 +116,7 @@ def scroll_and_click_by_xpath(
         driver = click(driver, xpath, send_key=text, sleep=sleep, enter=enter)
 
     return driver, True
+
+# def download(driver, xpath):
+#     link = driver.find_elements_by_xpath(xpath).get_attribute("href")
+#     print(link)
